@@ -1,0 +1,130 @@
+package ui;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+
+import com.ibm.db2.tools.common.AnimatedGearsButton;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Administrator 
+{
+	public static JPanel adminPanel = new JPanel();
+	
+	private JPanel menuPanel = new JPanel();
+	private JPanel menuButtonPanel = new JPanel();
+	private JLabel welcomeLabel = new JLabel();
+	private JButton setAdminButton = new JButton();
+	private JButton prodMainButton = new JButton("Product Maintainance");
+	private JButton logoutButton = new JButton("Logout");
+	private JLabel titleLabel = new JLabel("Menu");
+	private Font titleFont = LoginUI.titleFont;
+	private Color buttonColor = LoginUI.buttonColor;
+	private Cursor buttonCursor = new Cursor(Cursor.HAND_CURSOR);
+	private ButtonDesignUI buttonDesignUI = new ButtonDesignUI();
+	
+	public Administrator()
+	{
+		mainWindowControl();
+		menuControl();
+	}
+	
+	public void mainWindowControl()
+	{
+		adminPanel = new JPanel();
+		adminPanel.setLayout(null);
+		adminPanel.setOpaque(false);
+		adminPanel.setBounds(0, 0, 1366, 768);
+		LoginUI.windowFrame.add(adminPanel);
+		
+		TitledBorder border;
+    	border = BorderFactory.createTitledBorder("");
+		
+		welcomeLabel.setBorder(border);
+		welcomeLabel.setBounds(237, 20, 1366, 768);
+		adminPanel.add(welcomeLabel);
+	}
+	
+	
+	public void menuControl()
+	{
+		TitledBorder border;
+    	border = BorderFactory.createTitledBorder("");
+		
+    	menuPanel.setBorder(border);
+    	menuPanel.setBackground(new Color(1, 0, 0, 200));
+		menuPanel.setLayout(null);
+		menuPanel.setBounds(7, 30, 230, 730);
+		menuPanel.setOpaque(false);
+		adminPanel.add(menuPanel);
+		
+		titleLabel.setFont(titleFont);
+		titleLabel.setBounds(30, 15, 100, 30);
+		menuPanel.add(titleLabel);
+		
+		menuButtonPanel.setLayout(new GridLayout(3, 1));
+		menuButtonPanel.setOpaque(false);
+		menuButtonPanel.setBounds(6, 50, 218, 500);
+		menuPanel.add(menuButtonPanel);
+		
+		AdministratorHandler adminHandler = new AdministratorHandler();
+		
+		setAdminButton.setIcon(new ImageIcon("buttonIcon/userButton.png"));
+		setAdminButton.setUI(buttonDesignUI);
+		setAdminButton.setBackground(buttonColor);
+		setAdminButton.setCursor(buttonCursor);
+		setAdminButton.addActionListener(adminHandler);
+		menuButtonPanel.add(setAdminButton);
+		
+		prodMainButton.setIcon(new ImageIcon("buttonIcon/uniformMaintenance.png"));
+		prodMainButton.setUI(buttonDesignUI);
+		prodMainButton.setBackground(buttonColor);
+		prodMainButton.setCursor(buttonCursor);
+		prodMainButton.addActionListener(adminHandler);
+		menuButtonPanel.add(prodMainButton);
+		
+		logoutButton.setIcon(new ImageIcon("buttonIcon/adminLogout.png"));
+		logoutButton.setUI(buttonDesignUI);
+		logoutButton.setBackground(buttonColor);
+		logoutButton.addActionListener(adminHandler);
+		logoutButton.setCursor(buttonCursor);
+		menuButtonPanel.add(logoutButton);
+	}
+	
+	private class AdministratorHandler implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			String event = e.getActionCommand();
+			
+			if(event.equals(setAdminButton.getText()))
+			{
+				welcomeLabel.setVisible(false);
+				ProductMaintenaceUI.prodMainPanel.setVisible(false);
+				new SetAdminUI();
+				setAdminButton.setEnabled(false);
+				prodMainButton.setEnabled(true);
+			}
+			else if(event.equals(prodMainButton.getText()))
+			{
+				setAdminButton.setEnabled(true);
+				prodMainButton.setEnabled(false);
+				SetAdminUI.setAdminPanel.setVisible(false);
+				welcomeLabel.setVisible(false);
+				new ProductMaintenaceUI();
+			}
+			else if(event.equals(logoutButton.getText()))
+			{
+				adminPanel.setVisible(false);
+				new LoginUI();
+			}
+		}
+	}
+}
+
+
+
+
